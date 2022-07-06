@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  database:
+    restart: always
+    image: postgres:14.4-alpine
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - ./volumes/data:/var/lib/postgresql/data
+
+  proxy:
+    restart: always
+    image: nginx:1.23.0-alpine
+    ports:
+      - 80:80
+    env_file:
+      - .env
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - client
+      - server
+
+  client:
+    restart: always
+    build: client
+    ports:
+      - 8080:80
+
+  server:
+    restart: always
+    build: server
+    ports:
+      - 5000:5000
+    env_file:
+      - .env
+    depends_on:
+      - database

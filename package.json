@@ -1,0 +1,28 @@
+{
+  "name": "inventory",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "db:down": "docker stop postgres-inventory-dev && docker rm postgres-inventory-dev",
+    "db:up": "docker run --name postgres-inventory-dev -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres:14.4-alpine",
+    "dev:deps": "pnpm i && cd server && pnpm i && cd ../client && pnpm i",
+    "dev:server": "cp ./.env ./server && cd server && pnpm start:dev",
+    "dev:client": "cp ./.env ./client && cd client && pnpm start",
+    "dev:start": "concurrently --names \"Server,Client\" -c \"bgGreenBright.bold,bgBlueBright.bold\" --prefix \"{time}-{name}\" -t \"HH:mm:ss\" -k \"pnpm dev:server\" \"pnpm dev:client\"",
+    "prod:up": "cp ./.env ./client && docker-compose build --no-cache && docker-compose up -d",
+    "prod:down": "docker-compose down",
+    "prisma:migrate": "cp ./.env ./server && cd server && prisma migrate dev",
+    "prisma:push": "cp ./.env .server && cd server && prisma db push",
+    "prisma:generate": "cp ./.env ./server && cd server && prisma generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.2.2"
+  }
+}
