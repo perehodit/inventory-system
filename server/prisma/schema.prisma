@@ -11,9 +11,13 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  email      String   @unique
-  password   String
+  id              String   @id @default(uuid())
+  firstName       String
+  lastName        String
+  email           String   @unique
+  password        String
+  isAdministrator Boolean  @default(false)
+  lastVisit       DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
